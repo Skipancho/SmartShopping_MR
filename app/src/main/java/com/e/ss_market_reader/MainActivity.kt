@@ -37,7 +37,6 @@ class MainActivity : AppCompatActivity() {
 
         product_lv.adapter = adapter
 
-
         pay_btn.setOnClickListener {pay_action()}
         back_btn.setOnClickListener {initQRcodeScanner()}
 
@@ -57,11 +56,9 @@ class MainActivity : AppCompatActivity() {
         val result : IntentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         /*if(result !=null) { //always true
             if(result.contents == null) {
-                // qr코드에 주소가 없거나, 뒤로가기 클릭 시
                 Toast.makeText(this,"인식 실패",Toast.LENGTH_SHORT).show()
                 finish()
             } else {
-                //qr코드에 주소가 있을때 -> 주소에 관한 Toast 띄우는 함수 호출
                 MY_action(result.contents)
             }
         } else {
