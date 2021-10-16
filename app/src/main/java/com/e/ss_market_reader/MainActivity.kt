@@ -132,7 +132,6 @@ class MainActivity : AppCompatActivity() {
             .setPositiveButton("확인") { _, _ ->
                 //구매 완료 action
                 Add_purchase()
-                initQRcodeScanner()
             }
             .create()
         dialog.show()
@@ -140,27 +139,33 @@ class MainActivity : AppCompatActivity() {
 
     private fun Add_purchase(){
         val target : String = "https://ctg1770.cafe24.com/SC/S_C_AddPurchase.php"
+        var is_success = true
         val responseListener : Response.Listener<String> = Response.Listener { response ->
             try {
                 val jsonResponse = JSONObject(response)
                 val success = jsonResponse.getBoolean("success")
                 if (!success) {
                     Toast.makeText(this, "네트워크 에러", Toast.LENGTH_SHORT).show()
+                    is_success = false
                 }
             }catch (e : Exception){
                 e.printStackTrace()
+                is_success = false
             }
         }
         val queue : RequestQueue = Volley.newRequestQueue(this)
-        for (p : Product in products){
+        for (p : Product in products) {
             p.price = p.price * p.amount;
-            val request : PurchaseRequest = PurchaseRequest(userID,p,target,responseListener)
+            val request: PurchaseRequest = PurchaseRequest(userID, p, target, responseListener)
             queue.add(request)
         }
-        products.clear()
-        adapter.notifyDataSetChanged()
-        userID = "none"
-        total_cal(products)
+        if(is_success){
+            products.clear()
+            adapter.notifyDataSetChanged()
+            userID = "none"
+            total_cal(products)
+            initQRcodeScanner()
+        }
     }
 
 }
