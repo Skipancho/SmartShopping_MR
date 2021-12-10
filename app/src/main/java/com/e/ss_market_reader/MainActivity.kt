@@ -98,6 +98,8 @@ class MainActivity : AppCompatActivity() {
             e.printStackTrace()
         }
     }
+
+    @SuppressLint("SetTextI18n")
     private fun total_cal(list : List<Product>){
         var sum = 0
         if(list.isNotEmpty()){
@@ -108,7 +110,7 @@ class MainActivity : AppCompatActivity() {
         val totalPrice = findViewById<TextView>(R.id.totalPrice)
         val id_tv = findViewById<TextView>(R.id.userID_tv)
 
-        totalPrice.text = "총액 : "+sum+" 원"
+        totalPrice.text = "총액 : $sum 원"
         id_tv.text = userID
     }
 
@@ -138,7 +140,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun Add_purchase(){
-        val target : String = "https://ctg1770.cafe24.com/SC/S_C_AddPurchase.php"
         var is_success = true
         val responseListener : Response.Listener<String> = Response.Listener { response ->
             try {
@@ -156,7 +157,7 @@ class MainActivity : AppCompatActivity() {
         val queue : RequestQueue = Volley.newRequestQueue(this)
         for (p : Product in products) {
             p.price = p.price * p.amount;
-            val request: PurchaseRequest = PurchaseRequest(userID, p, target, responseListener)
+            val request: PurchaseRequest = PurchaseRequest(userID, p,responseListener)
             queue.add(request)
         }
         if(is_success){
